@@ -86,6 +86,11 @@ public class Environment_Handler : MonoBehaviour
                 PlayerManager.Instance.environtType = PlayerManager.EnvirontType.Square;
                 GameMaster.Instance.CloseEnvironentPanel();
                 break;
+            case 5:
+                Game.EnvCount = 5;
+                PlayerManager.Instance.environtType = PlayerManager.EnvirontType.Scifi;
+                GameMaster.Instance.CloseEnvironentPanel();
+                break;
         }
     }
 }

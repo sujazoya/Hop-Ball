@@ -61,7 +61,11 @@ public class Game
 		get { return PlayerPrefs.GetInt("EnvCount", 0); }
 		set { PlayerPrefs.SetInt("EnvCount", value); }
 	}
-
+	public static int BallIndex
+	{
+		get { return PlayerPrefs.GetInt("BallIndec", 0); }
+		set { PlayerPrefs.SetInt("BallIndec", value); }
+	}
 	public static int GameMode
 	{
 		get { return PlayerPrefs.GetInt("GameMode", 0); }
@@ -72,6 +76,21 @@ public class Game
 	{
 		get { return PlayerPrefs.GetInt("retryCount", 0); }
 		set { PlayerPrefs.SetInt("retryCount", value); }
+	}
+	public static int TotalSpinCount
+	{
+		get { return PlayerPrefs.GetInt("TotalSpinCount", 0); }
+		set { PlayerPrefs.SetInt("TotalSpinCount", value); }
+	}
+	public static int TotalScratchCount
+	{
+		get { return PlayerPrefs.GetInt("TotalScratchCount", 0); }
+		set { PlayerPrefs.SetInt("TotalScratchCount", value); }
+	}
+	public static int DateCount
+	{
+		get { return PlayerPrefs.GetInt("DateCount", 0); }
+		set { PlayerPrefs.SetInt("DateCount", value); }
 	}
 	public static int TotalCoins
 	{

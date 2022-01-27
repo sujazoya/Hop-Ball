@@ -7,6 +7,15 @@ using UnityEngine.Networking;
 
 namespace suja
 {
+    [System.Serializable]
+    public class MassegeItem
+    {
+        public GameObject massegeCanvas;
+        public GameObject effect;
+        public Text headerText;
+        public Text massegeText;
+        public Button closeButton;
+    }
 
     [System.Serializable]
     public class GameHandler_items
@@ -46,7 +55,7 @@ namespace suja
               
         public static bool isNetworkAvailable;
         public static bool isGoogleSheetDataConfirmed;
-        
+        [SerializeField] MassegeItem massegeItem;
         
 
        
@@ -63,6 +72,8 @@ namespace suja
             if (items.closeButton) { items.closeButton.onClick.AddListener(CloseNetWarnPanel); }
             if (otherGameButton) { otherGameButton.onClick.AddListener(GoForOtherGames); }
             //PlayerPrefs.DeleteAll();
+            if (massegeItem.closeButton) { massegeItem.closeButton.onClick.AddListener(CloseMassege); }
+            CloseMassege();
         }
         void GoForOtherGames()
         {
@@ -77,8 +88,17 @@ namespace suja
             //items.massege_header.text = header;
             //items.massege.text = massege;
         }
-
-
+        void CloseMassege()
+        {
+            massegeItem.massegeCanvas.SetActive(false);
+        }
+        public void ShowMassege(string header, string massege, bool value)
+        {
+            massegeItem.massegeCanvas.SetActive(true);
+            massegeItem.headerText.text = header;
+            massegeItem.massegeText.text = massege;
+            if (value == false) { massegeItem.effect.SetActive(false); } else { massegeItem.effect.SetActive(true); }
+        }
 
 
         #region CHECKING UPDATE

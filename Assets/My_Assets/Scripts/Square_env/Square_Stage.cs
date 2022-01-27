@@ -40,7 +40,7 @@ public class Square_Stage : MonoBehaviour
     }
     IEnumerator TranferSpeed(float wait,int index)
     {
-        yield return new WaitForSeconds(wait);
+        yield return new WaitUntil(()=> stage.nextStageDistance>1);
         Stage myStage = stages[index].stage.GetComponent<Stage>();
         myStage.nextStageDistance = stage.nextStageDistance;
         myStage.angle = stage.angle;

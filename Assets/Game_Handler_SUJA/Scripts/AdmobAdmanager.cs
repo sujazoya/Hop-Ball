@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using GoogleMobileAds.Api;
 using System.Collections;
 using System;
+using suja;
 
 public class AdmobAdmanager : MonoBehaviour
 {  
@@ -215,6 +216,10 @@ public class AdmobAdmanager : MonoBehaviour
         //{
         //    FindObjectOfType<UIManager>().RewardTheUser_Half();
         //}
+        Game.TotalCoins += 50;
+        GameHandler.Instance.ShowMassege
+                ("Congratulation"
+                , "You Won 50 Credits", true);
     }
     public int CurrentReawIntIndex()
     {

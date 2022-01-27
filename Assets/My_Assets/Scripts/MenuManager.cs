@@ -13,6 +13,9 @@ public class MyUIItems
     public Image   levelImage;
     public GameObject[] starsIn;
     public GameObject[] starsOut;
+    public Button[] environment_Buttons;
+    public Button[] level_Buttons;
+    public GameObject[] environment_purchase_Buttons;
 }
 
 public class MenuManager : MonoBehaviour
@@ -22,18 +25,97 @@ public class MenuManager : MonoBehaviour
     public bool GameState;
     public GameObject menuElement;
     Transform currentStages;
-
+    public static string levelKey = "LevelKey";
+    public static string environmentKey = "Environment";
+    public static string startingLevelKey;
+    public static string startingEnvironmentKey;
+    private int environmentPrice = 5000;
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
         }
-        menuElement.SetActive(true);
+        menuElement.SetActive(true);      
+    }
+
+    private void OnEnable()
+    {
         for (int i = 0; i < items.countText.Length; i++)
         {
-            items.countText[i].text = Game.achivedLevelTarget.ToString();           
+            items.countText[i].text = Game.achivedLevelTarget.ToString();
         }
+        startingLevelKey = levelKey + 0;
+        if (!PlayerPrefs.HasKey(startingLevelKey))
+        {
+            PlayerPrefs.SetString(startingLevelKey, startingLevelKey);
+        }
+        startingEnvironmentKey = environmentKey + 0;
+        if (!PlayerPrefs.HasKey(startingEnvironmentKey))
+        {
+            PlayerPrefs.SetString(startingEnvironmentKey, startingEnvironmentKey);
+        }
+
+        CheckStatus();
+    }
+    void CheckStatus()
+    {
+        int levelCount = items.level_Buttons.Length;
+        for (int i = 0; i < levelCount; i++)
+        {
+            string lKey = levelKey+i;
+            if (!PlayerPrefs.HasKey(lKey))
+            {
+                items.level_Buttons[i].interactable=false;
+            }
+            else
+            {
+                items.level_Buttons[i].interactable = true;
+            }
+        }
+        int envCount = items.environment_Buttons.Length;
+        for (int i = 0; i < envCount; i++)
+        {
+            string envKey = environmentKey + i;
+            if (!PlayerPrefs.HasKey(envKey))
+            {
+                items.environment_Buttons[i].interactable = false;
+                items.environment_purchase_Buttons[i].SetActive(true);
+            }
+            else
+            {
+                items.environment_purchase_Buttons[i].SetActive(false);
+                items.environment_Buttons[i].interactable = true;
+            }
+        }
+    }
+    public void UnlockLevel(int levelNum)
+    {
+        string currentKey = levelKey + levelNum;
+        if (!PlayerPrefs.HasKey(currentKey))
+        {
+            PlayerPrefs.SetString(currentKey, currentKey);
+        }
+    }
+    public void PurchaseEnvironment(int envIndex)
+    {
+        //if (Game.TotalCoins >= environmentPrice)
+        //{
+        //    Game.TotalCoins -= environmentPrice;
+            string currentEnvKey = environmentKey + envIndex;
+            if (!PlayerPrefs.HasKey(currentEnvKey))
+            {
+                PlayerPrefs.SetString(currentEnvKey, currentEnvKey);
+            }
+            items.environment_Buttons[envIndex].interactable = true;
+            items.environment_purchase_Buttons[envIndex].SetActive(false);
+        //}
+        //else
+        //{
+        //    GameMaster.Instance.ShowMassege
+        //        ("Sorry"
+        //        , "You Don't Have Enough Credits", false);
+        //}
     }
     public void UpdateUI()
     {

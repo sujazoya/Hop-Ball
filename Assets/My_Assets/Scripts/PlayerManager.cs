@@ -17,7 +17,7 @@ public class PlayerManager : MonoBehaviour
 {
     public enum EnvirontType
     {
-        Circle,Triangle,Square,Hecta
+        Circle,Triangle,Square,Hecta,Scifi
     }
     public EnvirontType environtType=EnvirontType.Triangle;
     public Environment[] environments;
@@ -48,7 +48,8 @@ public class PlayerManager : MonoBehaviour
     public Transform currentStages;
     public static PlayerManager Instance;
     [SerializeField] GameObject boostEffect;
-
+    [SerializeField] GameObject ballSelecter;
+    [SerializeField] Texture2D[] balls;
     private void Awake()
     {
         if (Instance == null)
@@ -56,6 +57,7 @@ public class PlayerManager : MonoBehaviour
             Instance = this;
         }
         if (boostEffect) { boostEffect.SetActive(false); }
+        if (ballSelecter) { ballSelecter.SetActive(false); }
     }
     // Start is called before the first frame update
     void Start()
@@ -67,10 +69,35 @@ public class PlayerManager : MonoBehaviour
         mainCam = Camera.main;
         rb = GetComponent<Rigidbody>();
         //_collider = GetComponent<Collider>();
-        BallRenderer = ball. GetComponent<Renderer>();
+        BallRenderer = ballMesh. GetComponent<Renderer>();
         airEffect.gameObject.SetActive(false);
         //CreateNewPlatform();
         GetCurentEnvironent();
+    }
+    void UpdateBallTexture()
+    {
+        BallRenderer = ballMesh.GetComponent<Renderer>();
+
+        //Make sure to enable the Keywords
+        BallRenderer.material.EnableKeyword("_NORMALMAP");
+        BallRenderer.material.EnableKeyword("_METALLICGLOSSMAP");
+
+        //Set the Texture you assign in the Inspector as the main texture (Or Albedo)
+        BallRenderer.material.SetTexture("_MainTex", balls[Game.BallIndex]);
+        //Set the Normal map using the Texture you assign in the Inspector
+        //BallRenderer.material.SetTexture("_BumpMap", m_Normal);
+        ////Set the Metallic Texture as a Texture you assign in the Inspector
+        //BallRenderer.material.SetTexture("_MetallicGlossMap", m_Metal);
+    }
+    public void ShowBallSelecter()
+    {
+        GameMaster.Instance.UIObject(Game.Menu).SetActive(false);
+        if (ballSelecter) { ballSelecter.SetActive(true); }
+    }
+    public void CloseBallSelecter()
+    {
+        if (ballSelecter) { ballSelecter.SetActive(false); }
+        GameMaster.Instance.UIObject(Game.Menu).SetActive(true);
     }
     void GetCurentEnvironent()
     {
@@ -87,6 +114,9 @@ public class PlayerManager : MonoBehaviour
                 break;
             case 4:
                 environtType = EnvirontType.Square;
+                break;
+            case 5:
+                environtType = EnvirontType.Scifi;
                 break;
         }
     }
@@ -355,6 +385,7 @@ public class PlayerManager : MonoBehaviour
                 environments[1].envParent.SetActive(false);
                 environments[2].envParent.SetActive(false);
                 environments[3].envParent.SetActive(false);
+                environments[4].envParent.SetActive(false);
                 stages = null;
                 stages = environments[0].stages;
                 path = null;
@@ -369,6 +400,7 @@ public class PlayerManager : MonoBehaviour
                 environments[1].envParent.SetActive(true);
                 environments[2].envParent.SetActive(false);
                 environments[3].envParent.SetActive(false);
+                environments[4].envParent.SetActive(false);
                 stages = null;
                 stages = environments[1].stages;
                 path = null;
@@ -383,6 +415,7 @@ public class PlayerManager : MonoBehaviour
                 environments[1].envParent.SetActive(false);
                 environments[2].envParent.SetActive(true);
                 environments[3].envParent.SetActive(false);
+                environments[4].envParent.SetActive(false);
                 stages = environments[2].stages;
                 path = environments[2].path;
                 for (int i = 0; i < environments[2].otherItems.Length; i++)
@@ -395,6 +428,7 @@ public class PlayerManager : MonoBehaviour
                 environments[1].envParent.SetActive(false);
                 environments[2].envParent.SetActive(false);
                 environments[3].envParent.SetActive(true);
+                environments[4].envParent.SetActive(false);
                 stages = environments[3].stages;
                 path = environments[3].path;
                 for (int i = 0; i < environments[3].otherItems.Length; i++)
@@ -402,9 +436,24 @@ public class PlayerManager : MonoBehaviour
                     environments[3].otherItems[i].SetActive(true);
                 }
                 break;
-           
+            case EnvirontType.Scifi:
+                environments[0].envParent.SetActive(false);
+                environments[1].envParent.SetActive(false);
+                environments[2].envParent.SetActive(false);
+                environments[3].envParent.SetActive(false);
+                environments[4].envParent.SetActive(true);
+                stages = environments[4].stages;
+                path = environments[4].path;
+                for (int i = 0; i < environments[3].otherItems.Length; i++)
+                {
+                    environments[4].otherItems[i].SetActive(true);
+                }
+                break;
+
+
         }
         StartCoroutine(TryToCreatePlateform());
+        UpdateBallTexture();
     }
    public IEnumerator TryToCreatePlateform()
     {       
@@ -434,6 +483,7 @@ public class PlayerManager : MonoBehaviour
             Game.gameStatus = Game.GameStatus.isGameWin;
             GameMaster.Instance.OnGameWon();
             winDeclared = true;
+            MenuManager.Instance.UnlockLevel(Game.CurrentLevel);
         }
          StartCoroutine(TryToCreatePlateform());
        

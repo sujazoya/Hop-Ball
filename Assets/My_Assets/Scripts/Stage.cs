@@ -9,8 +9,8 @@ public class Stage : MonoBehaviour
         None,Diemond,Coin,Star
     }
 
-    [HideInInspector] public float nextStageDistance;
-    [HideInInspector] public float angle;
+     public float nextStageDistance;
+     public float angle;
     public GameObject effects;
     Animator animator;
     [SerializeField] bool startingStage;
@@ -35,7 +35,6 @@ public class Stage : MonoBehaviour
         {
             effects.SetActive(true);
             Invoke("DisableSelf", 2);
-            animator.SetBool("act", true);
             if (item) { item.SetActive(false); }
             Game.achivedLevelTarget++;
             switch (itemType)
@@ -55,6 +54,7 @@ public class Stage : MonoBehaviour
                     MusicManager.PlaySfx_Other("star");
                     break;
             }
+            animator.SetBool("act", true);
         }
        
        

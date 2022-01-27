@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System;
+
 [System.Serializable]
 public class MassegeItems
 {
@@ -97,6 +99,11 @@ public class GameMaster : MonoBehaviour
 	[SerializeField] Animator coinAnim;
 	[SerializeField] Animator diemondAnim;
 
+	DateTime dateCurrent;
+	string dateString;
+	//DateTime dateNext = DateTime.Parse(date);
+	//int days = (dateNext - dateCurrent).Days;
+
 	#region Singleton class: UIManager
 
 	public static GameMaster Instance;
@@ -138,18 +145,56 @@ public class GameMaster : MonoBehaviour
 		yield return new WaitForSeconds(wait);
 		//back.SetActive(value);
     }
-
+	//This is only For Spin Scratch Game
+	void CheckForSpinRenew()
+    {
+        if (NextDate())
+        {
+			Game.TotalSpinCount = 0;
+			Game.TotalScratchCount = 0;
+			Game.TotalSpinCount += 10;
+			Game.TotalScratchCount += 10;
+			Game.DateCount = 0;
+		}
+    }
+	 void SaveDate()
+    {
+        if (Game.DateCount == 0)
+        {
+			Game.DateCount += 1;
+			dateCurrent = DateTime.Now;
+			dateString = dateCurrent.ToString(); // and use somewhere, somehow..
+			if (!PlayerPrefs.HasKey(dateString))
+            {
+				PlayerPrefs.SetString(dateString, dateString);
+            }
+		}
+	}
+	 bool NextDate()
+    {
+		DateTime dateC = DateTime.Now;
+		string  dateS = dateC.ToString();
+		if (!PlayerPrefs.HasKey(dateS))
+		{
+			return true;
+		}
+		else
+			return false;
+	}
 	void Start ()
 	{
+		
 		massegeItems.closeButton.onClick.AddListener(CloseMassegeCanvas);
 		//reset progress value
 		//progressFillImage.fillAmount = 0f;
 		GetButtonsAndApplyFuntions();
 		CloseMassegeCanvas();
 		//UpdateLevelStatus();
-		if (Game.retryCount == 0) { ShowUI(Game.Menu); }		
-	    //StartCoroutine(MusicManager.PlayMusic("menu",2));	
-	
+		if (Game.retryCount == 0) { ShowUI(Game.Menu); }
+		//StartCoroutine(MusicManager.PlayMusic("menu",2));	
+		SaveDate();
+		CheckForSpinRenew();
+		ActAddingCoin();
 	}
 	public void StartGame()
     {
@@ -863,5 +908,9 @@ public class GameMaster : MonoBehaviour
 	public void GoToMenu()
     {
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+	}
+	public void CloseMassegePanel()
+    {
+		massegeItems.massegeCanvas.SetActive(false);
 	}
 }

@@ -6,6 +6,21 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Game.unity
+    path: Assets/Game_Handler_SUJA/LoadingScene.unity
+    guid: 14b1a56decc7da341ba9f089a8c821b5
+  - enabled: 1
+    path: Assets/My_Assets/Scenes/MainMenu.unity
+    guid: b301b8d1d54485b43a5e62321fc6b075
+  - enabled: 1
+    path: Assets/My_Assets/Scenes/Game.unity
     guid: 4bbd569e373a8d1449937bb8f6b87a1c
+  - enabled: 1
+    path: Assets/My_Assets/Spin/Scenes/SpinMenu.unity
+    guid: d152890ebfe307b4eb34541590bb58bb
+  - enabled: 1
+    path: Assets/My_Assets/Spin/Scenes/SpinWin.unity
+    guid: 8d8b00a6c21db3b429fc478d33f842ae
+  - enabled: 1
+    path: Assets/My_Assets/Spin/Scenes/Scratch.unity
+    guid: 0a1017651deaa514982a7cd5353e0d0a
   m_configObjects: {}
